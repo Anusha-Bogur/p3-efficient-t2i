@@ -1,15 +1,23 @@
-"""P2. CLIP score (ViT-L/14, 0-100 scale) and clean-FID."""
-import numpy as np, torch
+"""CLIP score (ViT-L/14, 0-100 scale, same formula as torchmetrics) and clean-FID."""
+import torch
 from PIL import Image
 
 def clip_score(image_paths, prompts, device="cuda", batch=16):
-    from torchmetrics.multimodal.clip_score import CLIPScore
-    m = CLIPScore(model_name_or_path="openai/clip-vit-large-patch14").to(device)
-    for i in range(0, len(image_paths), batch):
-        ims = [torch.from_numpy(np.array(Image.open(p).convert("RGB").resize((512, 512)))).permute(2, 0, 1)
-               for p in image_paths[i:i + batch]]
-        m.update(torch.stack(ims).to(device), [t[:300] for t in prompts[i:i + batch]])
-    return round(float(m.compute()), 3)
+    from transformers import CLIPModel, CLIPProcessor
+    name = "openai/clip-vit-large-patch14"
+    model = CLIPModel.from_pretrained(name).to(device).eval()
+    proc = CLIPProcessor.from_pretrained(name)
+    scores = []
+    with torch.no_grad():
+        for i in range(0, len(image_paths), batch):
+            ims = [Image.open(p).convert("RGB") for p in image_paths[i:i + batch]]
+            inp = proc(text=prompts[i:i + batch], images=ims, return_tensors="pt",
+                       padding=True, truncation=True).to(device)
+            out = model(**inp)
+            img = out.image_embeds / out.image_embeds.norm(dim=-1, keepdim=True)
+            txt = out.text_embeds / out.text_embeds.norm(dim=-1, keepdim=True)
+            scores += (100 * (img * txt).sum(-1)).clamp(min=0).tolist()
+    return round(sum(scores) / len(scores), 3)
 
 def fid(gen_dir, ref_dir="data/ref"):
     from cleanfid import fid as cfid
