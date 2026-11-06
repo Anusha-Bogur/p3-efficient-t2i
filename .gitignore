@@ -1,0 +1,8 @@
+__pycache__/
+data/
+results/*/*.png
+lora_bk/checkpoint-*
+lora_bk/logs/
+diffusers/
+.env
+*.log

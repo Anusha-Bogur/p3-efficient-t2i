@@ -1,0 +1,13 @@
+torch
+diffusers>=0.30
+transformers
+accelerate
+peft
+safetensors
+opencv-python-headless
+gradio
+# evaluation only
+torchmetrics[multimodal]
+clean-fid
+matplotlib
+psutil
