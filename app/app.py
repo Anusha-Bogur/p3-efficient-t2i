@@ -1,6 +1,8 @@
 """P3 owns this file. Gradio app = the live URL."""
 import sys, os, json
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import spaces                              # must come before torch
+os.environ.setdefault("P3_DEVICE", "cuda")  # must be set before models.pipeline is imported
 import torch, gradio as gr
 from models.pipeline import load_pipeline, generate, model_size, CONFIGS, DEVICE, LORA
 from classical.postprocess import postprocess
@@ -8,6 +10,8 @@ from classical.postprocess import postprocess
 NAME = "bk_final" if os.path.isdir(LORA) else "bk_dpm20_taesd"
 PIPE = load_pipeline(NAME, safety=True)
 SIZE = model_size(PIPE)
+
+@spaces.GPU(duration=45)
 
 def run(prompt, seed, use_cv):
     prompt = (prompt or "").strip()
