@@ -1,0 +1,23 @@
+flowchart TB
+  subgraph APP["1. Gradio app on a Hugging Face ZeroGPU Space (app/app.py)"]
+    IN["User input: prompt, seed (-1 = random), mode, CV on/off"] --> VAL["Input validation: empty rejected, >77 tokens warned, random seed drawn"]
+  end
+  subgraph GEN["2. Generation (models/pipeline.py, models/modes.py, models/regional.py; config bk_final, fp16)"]
+    MODE["Mode dispatcher: Low | Compositional (per-object text encoding + canvas region, side-by-side prompts) | Medium (3 candidates, 25 steps, full VAE; CLIP ViT-B/32 picks)"]
+    TE["CLIP ViT-L/14 text encoder"] --> UNET["BK-SDM-Small-2M UNet + LoRA (downloaded from HF at start-up, fused)"]
+    UNET --> SCH["DPM-Solver++, 20 steps, guidance 7.5"] --> DEC["TAESD decoder + safety checker"]
+    MODE --> TE
+    MODE --> UNET
+  end
+  subgraph CV["3. Classical CV (classical/postprocess.py)"]
+    R["Resize / upscale"] --> C["Colour correction"] --> E["Edge-aware filter"] --> A["Artifact detect + fix"] --> Q["Quality score + gate"]
+  end
+  VAL --> MODE
+  DEC --> R
+  Q --> OUT["4. Output: raw + corrected image, seed, timings, model size, mode details, CV report"]
+  MODE -. "GPU out of memory: regenerate in Low, 10 steps" .-> MODE
+  subgraph OFF["5. Offline"]
+    TR["LoRA training (train/lora.sh): 1,000 COCO train pairs -> HF repo anu-122006/p3-lora-bk"]
+    EV["Evaluation (eval/): 6 configs x 300 COCO val prompts; 30 multi-object prompts x 3 modes"]
+  end
+  TR -. "downloaded at start-up" .-> UNET
