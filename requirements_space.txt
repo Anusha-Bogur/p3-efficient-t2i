@@ -1,0 +1,10 @@
+torch
+diffusers>=0.30
+transformers
+accelerate
+peft
+safetensors
+huggingface_hub
+opencv-python-headless
+gradio
+spaces

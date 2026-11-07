@@ -1,0 +1,17 @@
+{
+ "config": "bk_final",
+ "tag": "gpu",
+ "device": "cuda",
+ "n": 300,
+ "res": 512,
+ "steps": 20,
+ "lora_loaded": true,
+ "latency_median_s": 2.168,
+ "latency_p95_s": 2.206,
+ "peak_mem_GB": 1.41,
+ "model_MB": 1219.1,
+ "tflops_per_image": 20.58,
+ "gpu": "Tesla T4",
+ "clip_L14": 26.037,
+ "fid_300": 131.04
+}

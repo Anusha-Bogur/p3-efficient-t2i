@@ -4,10 +4,14 @@ transformers
 accelerate
 peft
 safetensors
+huggingface_hub
 opencv-python-headless
 gradio
-# evaluation only
+spaces
+# evaluation only (not needed by the app)
 torchmetrics[multimodal]
 clean-fid
 matplotlib
 psutil
+lpips
+spacy
