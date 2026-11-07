@@ -6,7 +6,7 @@ peft
 safetensors
 huggingface_hub
 opencv-python-headless
-gradio
+gradio==6.18.0
 spaces
 # evaluation only (not needed by the app)
 torchmetrics[multimodal]

@@ -6,5 +6,5 @@ peft
 safetensors
 huggingface_hub
 opencv-python-headless
-gradio
+gradio==6.18.0
 spaces
