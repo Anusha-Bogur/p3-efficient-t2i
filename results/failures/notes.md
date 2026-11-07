@@ -34,3 +34,13 @@
 
 \- Likely cause: the model isn't trained to draw readable letters, and the text encoder doesn't pass exact spellings to the image
 
+
+
+\### Colour binding: "a red car beside a blue house" (Compositional)
+
+\- Layout "col" was applied (regions: a red car, a blue house).
+
+\- Result: car red and on the left, but the house wall came out mostly red; blue appears only on the door and planter.
+
+\- Cause: the text encoder does not reliably tie each colour to its own object, so Compositional and Medium only help partly.
+
