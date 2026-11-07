@@ -1,6 +1,6 @@
-# P3: Resource-Efficient Text-to-Image Generation (Team T__)
+# P3: Resource-Efficient Text-to-Image Generation (Team T38)
 
-Live demo: <URL>  ·  Design document: docs/  ·  Results: eval_P3_TXX.md
+Live demo: <URL>  ·  Design document: docs/  ·  Results: eval_P3_T38.md
 
 ## What it does
 BK-SDM-Small-2M (lightweight, knowledge-distilled Stable Diffusion) adapted with a LoRA on COCO,
