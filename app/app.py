@@ -49,11 +49,11 @@ def run(prompt, seed, use_cv, mode):
 with gr.Blocks(title="P3: Resource-efficient text-to-image") as demo:
     gr.Markdown("## P3: Resource-efficient text-to-image\n"
                 "BK-SDM-Small + DPM-Solver++ (20 steps) + TAESD + LoRA, followed by an automatic classical-CV pipeline. "
-                f"Model: **{NAME}**.  \n**Modes:** Low = fastest (~2 s on a T4) · Compositional = side-by-side "
-                "multi-object prompts: each object gets its own text encoding and canvas region (~3.5 s) · "
-                "Medium = best of 3 candidates, picked by CLIP (~8 s).")
+                f"Model: **{NAME}**.  \n**Modes:** Low = fastest (about2 s on a T4) · Compositional = side-by-side "
+                "multi-object prompts: each object gets its own text encoding and canvas region (about3.5 s) · "
+                "Medium = best of 3 candidates, picked by CLIP (about8 s).")
     with gr.Row():
-        prompt = gr.Textbox(label="Prompt", placeholder="a red car beside a blue house", scale=4)
+        prompt = gr.Textbox(label="Prompt", placeholder="a golden retriever playing in a park", scale=4)
         seed = gr.Number(label="Seed (-1 = random; reuse a seed to reproduce an image)", value=-1, precision=0, scale=1)
     with gr.Row():
         mode = gr.Radio(MODES, value="Low", label="Mode")
